@@ -1,95 +1,57 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import ListaItem from "@/components/ListaItem";
+import styles from "./page.module.css";
+import Header from "@/components/Header";
+
+import ImgEuro from "@/public/euro.png";
+import ImgChampagne from "@/public/champagne.png";
+import ImgAssento from "@/public/assento.jpg";
+import ImgWhey from "@/public/wehey.png";
+import ImgJantar from "@/public/jantar.jpg";
+import ImgPasseio from "@/public/passeioportugal.png";
+
+const itens = [
+  {
+    title: "Euro para viagem",
+    value: 200,
+    imageSrc: ImgEuro,
+  },
+  {
+    title: "Champagne para a noite de núpcias",
+    value: 200,
+    imageSrc: ImgChampagne,
+  },
+  {
+    title: "Upgrade de assento na lua de mel",
+    value: 200,
+    imageSrc: ImgAssento,
+  },
+  {
+    title: "Whey para manter o shape pós festa",
+    value: 200,
+    imageSrc: ImgWhey,
+  },
+  {
+    title: "Jantar romântico em Porto",
+    value: 200,
+    imageSrc: ImgJantar,
+  },
+  {
+    title: "Passeio em Portugal",
+    value: 150.55,
+    imageSrc: ImgPasseio,
+  },
+];
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <Header />
+      <h1 className={styles.title}>Lista de presentes</h1>
+      <div className={styles.listaPresentes}>
+        {itens.map((props) => (
+          <ListaItem key={props.title} {...props} />
+        ))}
       </div>
     </main>
-  )
+  );
 }

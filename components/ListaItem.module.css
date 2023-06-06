@@ -1,0 +1,65 @@
+.itemPresente {
+    width: 16%;
+    border: 1px solid rgba(58, 0, 0, 0.25);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    padding: 20px 12px;
+    margin-bottom: 32px;
+}
+
+.itemPresente > .divider {
+    height: 2px;
+    width: 90%;
+    background-color: #eaeaea;
+}
+
+.itemPresente > p {
+    color: #3A0000;
+    font-weight: bolder;
+    margin: 12px;
+}
+
+.buyButton {
+    appearance: none;
+    background-color: white;
+    border: 1px solid #67061D;
+    color: #67061D;
+    font-weight: 800;
+    width: 100%;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.buyButton:hover {
+    background-color: #67061D;
+    border: 1px solid white;
+    color: white;
+}
+
+.itemImageHolder {
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.giftImage {
+    width: auto;
+    height: 100px;
+    border-radius: 4px;
+}
+
+.itemTitulo {
+    color: #3A0000;
+    font-weight: bold;
+    text-align: center;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
