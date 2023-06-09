@@ -2,8 +2,7 @@
 import mongoose from "mongoose";
 
 class Database {
-  private mongoUrl: string =
-    "mongodb+srv://cadrimiranda:q5HCXE7kVdaZ1gQI@recipies.jdyf9.mongodb.net/?retryWrites=true&w=majority";
+  private mongoUrl: string = process.env.NEXT_PUBLIC_MONGO_URL as string;
   private static instance: Database;
   private connection: mongoose.Connection | null = null;
 
