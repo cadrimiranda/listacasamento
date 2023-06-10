@@ -3,11 +3,11 @@ import { WishItemType } from "@/components/WishItem";
 const queries = {
   queryAllWishItems: (): Promise<WishItemType[]> => {
     return fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/api/wishlist/getall`
+      `/api/wishlist/getall`
     ).then((res) => res.json());
   },
   addWishItem: (body: Omit<WishItemType, "value"> & { value: string }) => {
-    return fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/api/wishlist/add`, {
+    return fetch(`/api/wishlist/add`, {
       method: "POST",
       body: JSON.stringify({
         ...body,
@@ -17,7 +17,7 @@ const queries = {
   },
   deleteWishItem: (name: string) => {
     return fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/api/wishlist/delete?name=${name}`,
+      `/api/wishlist/delete?name=${name}`,
       {
         method: "DELETE",
       }
