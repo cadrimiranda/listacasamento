@@ -2,27 +2,32 @@
 import WishList from "@/components/WishList";
 import queries from "@/src/query";
 import { Dispatch, FormEvent, SetStateAction, useRef, useState } from "react";
+import InputWithLabel from "./InputWithLabel";
+import styles from "./page.module.css";
 
 const AddForm = () => {
   const refImage = useRef<HTMLInputElement>(null);
+  const refQRCode = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
   const [imageSrc, setImageSrc] = useState("");
+  const [qrCode, setQrCode] = useState("");
 
-  const handleFile = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const file = evt.target.files?.[0];
+  const handleFile =
+    (setImage: Function) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+      const file = evt.target.files?.[0];
 
-    if (file) {
-      const reader = new FileReader();
+      if (file) {
+        const reader = new FileReader();
 
-      reader.onload = (event) => {
-        const base64String = event.target?.result as string;
-        setImageSrc(base64String);
-      };
+        reader.onload = (event) => {
+          const base64String = event.target?.result as string;
+          setImage(base64String);
+        };
 
-      reader.readAsDataURL(file);
-    }
-  };
+        reader.readAsDataURL(file);
+      }
+    };
 
   const handleInput =
     (setState: Dispatch<SetStateAction<string>>) =>
@@ -38,6 +43,7 @@ const AddForm = () => {
         title,
         value,
         imageSrc,
+        qrCode,
       })
       .then(() => {
         setTitle("");
@@ -51,42 +57,49 @@ const AddForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="title">Title:</label>
-      <input
-        onChange={handleInput(setTitle)}
-        type="text"
-        id="title"
-        name="title"
-        value={title}
-      />
-      <label htmlFor="value">Value:</label>
-      <input
-        onChange={handleInput(setValue)}
-        type="number"
-        id="value"
-        name="value"
-        value={value}
-      />
-      <label htmlFor="image">Image:</label>
-      <input
-        ref={refImage}
-        onChange={handleFile}
-        type="file"
-        id="image"
-        name="image"
-      />
-      <button type="submit">Submit</button>
+    <div>
+      <form className={styles.formContainer} onSubmit={handleSubmit}>
+        <InputWithLabel
+          id="title"
+          label="Title"
+          onChange={handleInput(setTitle)}
+          value={title}
+        />
+        <InputWithLabel
+          onChange={handleInput(setValue)}
+          label="Value"
+          type="number"
+          id="value"
+          value={value}
+        />
+        <InputWithLabel
+          onChange={handleFile(setImageSrc)}
+          label="Image"
+          type="file"
+          id="image"
+          ref={refImage}
+        />
+        <InputWithLabel
+          onChange={handleFile(setQrCode)}
+          label="QR Code"
+          type="file"
+          id="qrCode"
+          ref={refQRCode}
+        />
+        <button className={styles.submitButton} type="submit">
+          Submit
+        </button>
+      </form>
       <div>
         <WishList shouldDelete />
       </div>
-    </form>
+    </div>
   );
 };
 
 const PrivateWishListAdd = () => {
   const ref = useRef<HTMLInputElement>(null);
-  const [shouldAdd, setShouldAdd] = useState(false);
+  const [shouldAdd, setShouldAdd] = useState(true);
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
