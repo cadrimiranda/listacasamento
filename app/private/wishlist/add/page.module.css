@@ -77,9 +77,50 @@
   background-color: #65c466;
 }
 
+.submitButton {
+  position: relative;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submitButton:hover {
+  background-color: #65c466;
+}
+
+.submitButton.loading {
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+.submitButton.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (min-width: 769px) {
-  
-.inputContainer {
+  .inputContainer {
     flex-basis: 20%;
   }
 

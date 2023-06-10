@@ -1,11 +1,14 @@
 "use client";
-import WishList from "@/components/WishList";
+import WishList, { WishListRef } from "@/components/WishList";
 import queries from "@/src/query";
 import { Dispatch, FormEvent, SetStateAction, useRef, useState } from "react";
 import InputWithLabel from "./InputWithLabel";
 import styles from "./page.module.css";
+import SubmitButton from "./SubmitButton";
 
 const AddForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const refWishList = useRef<WishListRef>(null);
   const refImage = useRef<HTMLInputElement>(null);
   const refQRCode = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
@@ -37,6 +40,7 @@ const AddForm = () => {
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+    setIsLoading(true);
 
     queries
       .addWishItem({
@@ -53,6 +57,15 @@ const AddForm = () => {
         if (refImage.current) {
           refImage.current.value = "";
         }
+
+        if (refQRCode.current) {
+          refQRCode.current.value = "";
+        }
+
+        if (refWishList.current) {
+          refWishList.current.getData();
+        }
+        setIsLoading(false);
       });
   };
 
@@ -60,12 +73,14 @@ const AddForm = () => {
     <div>
       <form className={styles.formContainer} onSubmit={handleSubmit}>
         <InputWithLabel
+          disabled={isLoading}
           id="title"
           label="Title"
           onChange={handleInput(setTitle)}
           value={title}
         />
         <InputWithLabel
+          disabled={isLoading}
           onChange={handleInput(setValue)}
           label="Value"
           type="number"
@@ -73,6 +88,7 @@ const AddForm = () => {
           value={value}
         />
         <InputWithLabel
+          disabled={isLoading}
           onChange={handleFile(setImageSrc)}
           label="Image"
           type="file"
@@ -80,19 +96,16 @@ const AddForm = () => {
           ref={refImage}
         />
         <InputWithLabel
+          disabled={isLoading}
           onChange={handleFile(setQrCode)}
           label="QR Code"
           type="file"
           id="qrCode"
           ref={refQRCode}
         />
-        <button className={styles.submitButton} type="submit">
-          Submit
-        </button>
+        <SubmitButton isLoading={isLoading} />
       </form>
-      <div>
-        <WishList shouldDelete />
-      </div>
+      <WishList ref={refWishList} shouldDelete />
     </div>
   );
 };

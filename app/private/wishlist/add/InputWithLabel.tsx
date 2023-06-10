@@ -7,11 +7,12 @@ type InputWithLabelProps = {
   value?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   type?: string;
+  disabled: boolean;
 };
 
 const InputWithLabel = forwardRef<HTMLInputElement, InputWithLabelProps>(
   (
-    { label, id, value, onChange, type = "text" },
+    { label, id, value, onChange, type = "text", disabled },
     ref: Ref<HTMLInputElement>
   ) => {
     return (
@@ -20,6 +21,7 @@ const InputWithLabel = forwardRef<HTMLInputElement, InputWithLabelProps>(
           {label}
         </label>
         <input
+          disabled={disabled}
           type={type}
           id={id}
           name={id}
