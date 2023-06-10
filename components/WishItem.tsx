@@ -2,11 +2,14 @@ import Image from "next/image";
 import styles from "./WishItem.module.css";
 import queries from "@/src/query";
 import { useState } from "react";
+import useModal from "@/src/useModal";
+import Modal from "./Modal";
 
 export type WishItemType = {
   title: string;
   value: number;
   imageSrc: string;
+  qrCode: string;
 };
 
 const WishItem = ({
@@ -15,10 +18,13 @@ const WishItem = ({
   imageSrc,
   shouldDelete,
   refreshData,
+  qrCode,
 }: WishItemType & {
   shouldDelete?: boolean;
   refreshData?: () => void;
 }) => {
+  
+  const modal = useModal();
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -56,8 +62,9 @@ const WishItem = ({
           Delete
         </button>
       ) : (
-        <button className={styles.buyButton}>Comprar</button>
+        <button onClick={modal.openModal} className={styles.buyButton}>Comprar</button>
       )}
+      <Modal qrCode={qrCode} onClose={modal.closeModal} isOpen={modal.isOpen} />
     </div>
   );
 };

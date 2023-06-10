@@ -33,6 +33,7 @@
   border-radius: 8px;
   padding: 8px;
   cursor: pointer;
+  transition: background-color 0.5s, color 0.5s;
 }
 
 .buyButton:hover {
