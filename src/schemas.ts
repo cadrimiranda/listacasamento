@@ -6,6 +6,7 @@ const wishListSchema = new Schema({
   title: String,
   value: Number,
   imageSrc: String,
+  qrCode: String,
 });
 
 export async function getModels() {

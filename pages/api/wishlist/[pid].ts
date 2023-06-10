@@ -33,6 +33,7 @@ export default async function handler(req: any, res: any) {
       title: body.title,
       value: body.value,
       imageSrc: body.imageSrc,
+      qrCode: body.qrCode
     });
 
     return await newWishItem
