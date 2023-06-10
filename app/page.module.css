@@ -8,7 +8,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .title {
@@ -17,4 +17,11 @@
   color: #3a0000;
   font-weight: bold;
   margin: 20px auto;
+  font-size: 18px;
+}
+
+@media (min-width: 769px) {
+  .title {
+    font-size: 24px;
+  }
 }
