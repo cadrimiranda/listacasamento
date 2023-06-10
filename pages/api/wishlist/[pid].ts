@@ -14,18 +14,18 @@ function runMiddleware(
   return new Promise((resolve, reject) => {
     fn(req, res, (result: any) => {
       if (result instanceof Error) {
-        return reject(result)
+        return reject(result);
       }
 
-      return resolve(result)
-    })
-  })
+      return resolve(result);
+    });
+  });
 }
 
 export default async function handler(req: any, res: any) {
-  const { pid } = req.query;
+  const { pid, id } = req.query;
   const models = await getModels();
-  await runMiddleware(req, res, cors)
+  await runMiddleware(req, res, cors);
 
   if (pid === "add") {
     const body = JSON.parse(req.body);
@@ -33,7 +33,7 @@ export default async function handler(req: any, res: any) {
       title: body.title,
       value: body.value,
       imageSrc: body.imageSrc,
-      qrCode: body.qrCode
+      qrCode: body.qrCode,
     });
 
     return await newWishItem
@@ -46,21 +46,22 @@ export default async function handler(req: any, res: any) {
         res.status(400).json(error);
       });
   } else if (pid === "getall") {
-    models.WishListModel.find()
+    await models.WishListModel.find()
       .exec()
       .then((list) => {
-        res.status(200).json(list);
+        const newList = list.map((x) => ({
+          title: x.title,
+          value: x.value,
+          id: x._id,
+        }));
+        res.status(200).json(newList);
       })
       .catch((error) => {
         console.log("getall", error);
         return res.status(400).json([]);
       });
   } else if (pid === "delete") {
-    const queryParams = req.url.split("?")[1];
-    const params = new URLSearchParams(queryParams);
-    const paramValue = params.get("name");
-
-    models.WishListModel.deleteOne({ title: paramValue })
+    await models.WishListModel.deleteOne({ _id: id })
       .exec()
       .then(() => {
         res.status(200).json("ok");
@@ -68,6 +69,16 @@ export default async function handler(req: any, res: any) {
       .catch((error) => {
         console.log("delete", error);
         return res.status(400).json("error");
+      });
+  } else if (pid === "image") {
+    await models.WishListModel.findById(id)
+      .exec()
+      .then((item) => {
+        res.status(200).json(item.imageSrc);
+      })
+      .catch((error) => {
+        console.log("getall", error);
+        return res.status(400).json([]);
       });
   } else {
     res.status(200).json("Shit! SHITS MY MAN!");

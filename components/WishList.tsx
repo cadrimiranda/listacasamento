@@ -49,7 +49,10 @@ const WishList = forwardRef<WishListRef, { shouldDelete?: boolean }>(
           {isLoading ? (
             <>
               {[1, 2, 3, 4].map((value) => (
-                <div key={value} className={styles.skeletonBox} />
+                <div
+                  key={value}
+                  className="skeleton-placeholder skeleton-wish-item"
+                />
               ))}
             </>
           ) : (

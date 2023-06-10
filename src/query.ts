@@ -10,7 +10,7 @@ const queries = {
         return res.json();
       }
 
-      throw (res);
+      throw (res.json());
     });
   },
   addWishItem: (body: Omit<WishItemType, "value"> & { value: string }) => {
@@ -22,11 +22,19 @@ const queries = {
       }),
     });
   },
-  deleteWishItem: (name: string) => {
+  deleteWishItem: (id: string) => {
     return fetch(
-      `/api/wishlist/delete?name=${name}`,
+      `/api/wishlist/delete?id=${id}`,
       {
         method: "DELETE",
+      }
+    );
+  },
+  getImageSrc: (id: string) => {
+    return fetch(
+      `/api/wishlist/image?id=${id}`,
+      {
+        method: "POST",
       }
     );
   },
