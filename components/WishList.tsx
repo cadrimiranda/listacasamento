@@ -46,21 +46,22 @@ const WishList = forwardRef<WishListRef, { shouldDelete?: boolean }>(
     return (
       <Suspense>
         <div className={styles.listaPresentes}>
-          {isLoading && (
+          {isLoading ? (
             <>
               {[1, 2, 3, 4].map((value) => (
                 <div key={value} className={styles.skeletonBox} />
               ))}
             </>
+          ) : (
+            itens.map((props) => (
+              <WishItem
+                refreshData={getData}
+                shouldDelete={shouldDelete}
+                key={props.title}
+                {...props}
+              />
+            ))
           )}
-          {itens.map((props) => (
-            <WishItem
-              refreshData={getData}
-              shouldDelete={shouldDelete}
-              key={props.title}
-              {...props}
-            />
-          ))}
         </div>
       </Suspense>
     );
