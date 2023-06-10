@@ -2,18 +2,17 @@ import { WishItemType } from "@/components/WishItem";
 
 const queries = {
   queryAllWishItems: (): Promise<WishItemType[]> => {
-    return fetch(
-      `/api/wishlist/getall`
-    ).then((res) => {
+    return fetch(`/api/wishlist/getall`).then((res) => {
       if (res.status === 200) {
-
         return res.json();
       }
 
-      throw (res.json());
+      throw res.json();
     });
   },
-  addWishItem: (body: Omit<WishItemType, "value"> & { value: string }) => {
+  addWishItem: (
+    body: Omit<WishItemType, "value" | "id"> & { value: string }
+  ) => {
     return fetch(`/api/wishlist/add`, {
       method: "POST",
       body: JSON.stringify({
@@ -23,20 +22,14 @@ const queries = {
     });
   },
   deleteWishItem: (id: string) => {
-    return fetch(
-      `/api/wishlist/delete?id=${id}`,
-      {
-        method: "DELETE",
-      }
-    );
+    return fetch(`/api/wishlist/delete?id=${id}`, {
+      method: "DELETE",
+    });
   },
   getImageSrc: (id: string) => {
-    return fetch(
-      `/api/wishlist/image?id=${id}`,
-      {
-        method: "POST",
-      }
-    );
+    return fetch(`/api/wishlist/image?id=${id}`, {
+      method: "POST",
+    });
   },
 };
 
