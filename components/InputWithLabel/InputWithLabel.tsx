@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Ref, forwardRef } from "react";
-import styles from "./page.module.css";
+import styles from "./style.module.css";
 
 type InputWithLabelProps = {
   label: string;

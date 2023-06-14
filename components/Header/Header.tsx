@@ -1,4 +1,4 @@
-import styles from "./Header.module.css";
+import styles from "./styles.module.css";
 import Image from "next/image";
 import CoverImage from "@/public/cover.jpeg";
 

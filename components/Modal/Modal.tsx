@@ -1,13 +1,13 @@
 import React from "react";
-import styles from "./Modal.module.css";
+import styles from "./styles.module.css";
 import wishListStyles from "./WishItem.module.css";
-import { WishItemType } from "./WishItem";
+import { WishListItemType } from "../WishList/item/WishListItem";
 import Image from "next/image";
 
 interface ModalState {
   isOpen: boolean;
   onClose: () => void;
-  qrCode: WishItemType["qrCode"];
+  qrCode: WishListItemType["qrCode"];
 }
 
 const Modal = ({ isOpen, onClose, qrCode }: ModalState) => {

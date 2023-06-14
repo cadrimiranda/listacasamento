@@ -7,19 +7,22 @@ import {
   useImperativeHandle,
   useState,
 } from "react";
-import WishItem, { WishItemType } from "./WishItem";
-import styles from "../app/page.module.css";
-import wishItemStyle from "./WishItem.module.css";
+import WishListItem, { WishListItemType } from "./item/WishListItem";
+import styles from "./styles.module.css";
 import queries from "@/src/query";
 
 export type WishListRef = {
   getData: () => void;
 };
 
-const WishList = forwardRef<WishListRef, { shouldDelete?: boolean }>(
+export type WishListType = {
+  shouldDelete?: boolean;
+};
+
+const WishList = forwardRef<WishListRef, WishListType>(
   ({ shouldDelete }, ref) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [itens, setItens] = useState<WishItemType[]>([]);
+    const [itens, setItens] = useState<WishListItemType[]>([]);
 
     const getData = useCallback(() => {
       setIsLoading(true);
@@ -31,11 +34,9 @@ const WishList = forwardRef<WishListRef, { shouldDelete?: boolean }>(
 
     useImperativeHandle(
       ref,
-      () => {
-        return {
-          getData,
-        };
-      },
+      () => ({
+        getData,
+      }),
       [getData]
     );
 
@@ -57,7 +58,7 @@ const WishList = forwardRef<WishListRef, { shouldDelete?: boolean }>(
             </>
           ) : (
             itens.map((props) => (
-              <WishItem
+              <WishListItem
                 refreshData={getData}
                 shouldDelete={shouldDelete}
                 key={props.title}

@@ -4,13 +4,6 @@
   min-height: 100vh;
 }
 
-.listaPresentes {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: center;
-}
-
 .title {
   width: 100%;
   text-align: center;

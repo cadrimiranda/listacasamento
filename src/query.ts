@@ -1,7 +1,7 @@
-import { WishItemType } from "@/components/WishItem";
+import { WishListItemType } from "@/components/WishList/item/WishListItem";
 
 const queries = {
-  queryAllWishItems: (): Promise<WishItemType[]> => {
+  queryAllWishItems: (): Promise<WishListItemType[]> => {
     return fetch(`/api/wishlist/getall`).then((res) => {
       if (res.status === 200) {
         return res.json();
@@ -11,7 +11,7 @@ const queries = {
     });
   },
   addWishItem: (
-    body: Omit<WishItemType, "value" | "id"> & { value: string }
+    body: Omit<WishListItemType, "value" | "id"> & { value: string }
   ) => {
     return fetch(`/api/wishlist/add`, {
       method: "POST",

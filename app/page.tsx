@@ -1,6 +1,6 @@
 import styles from "./page.module.css";
-import Header from "@/components/Header";
-import WishList from "@/components/WishList";
+import Header from "@/components/Header/Header";
+import WishList from "@/components/WishList/WishList";
 
 export default function Home() {
   return (
