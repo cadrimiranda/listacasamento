@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
-import wishListStyles from "./WishItem.module.css";
+import wishListStyles from "../WishList/item/styles.module.css";
 import { WishListItemType } from "../WishList/item/WishListItem";
 import Image from "next/image";
 

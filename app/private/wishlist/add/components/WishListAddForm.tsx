@@ -3,7 +3,6 @@ import queries from "@/src/query";
 import { Dispatch, FormEvent, SetStateAction, useRef, useState } from "react";
 import styles from "./page.module.css";
 import SubmitButton from "./SubmitButton";
-import { WishListItemType } from "@/components/WishList/item/WishListItem";
 import InputWithLabel from "@/components/InputWithLabel/InputWithLabel";
 
 export const WishListAddForm = () => {

@@ -58,8 +58,7 @@ const WishItem = ({
         )}
       </div>
       <p className={styles.itemTitulo}>{title}</p>
-      <div className={styles.divider} />
-      <p>
+      <p className={styles.amount}>
         {value.toLocaleString("pt-BR", {
           currency: "BRL",
           style: "currency",
