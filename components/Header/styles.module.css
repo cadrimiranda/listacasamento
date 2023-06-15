@@ -36,7 +36,7 @@
   color: #eaeaea;
   font-weight: 100;
   letter-spacing: 1.5px;
-  font-size: 48px;
+  font-size: 52px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
@@ -96,7 +96,7 @@
   }
 
   .header > .headerTitle {
-    font-size: 54px;
+    font-size: 64px;
   }
   .header > .headerCover {
     height: 100%;
