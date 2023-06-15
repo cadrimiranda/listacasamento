@@ -12,12 +12,14 @@
 
 .header > .headerCover {
   background-repeat: no-repeat;
-  height: auto;
-  width: 100%;
+  height: 100%;
+  width: auto;
   background-size: cover;
   position: absolute;
-  bottom: 0px;
   z-index: 0;
+
+  transform: scale(3);
+  bottom: 100%;
 }
 
 .header > .headerTitle,
@@ -56,6 +58,12 @@
   font-weight: bold;
 }
 
+@media (max-width: 768px) {
+  .headerCover {
+    right: 50%;
+  }
+}
+
 @media (min-width: 769px) {
   .header {
     height: 300px;
@@ -63,5 +71,14 @@
 
   .header > .headerSubTitle {
     font-size: 20px;
+  }
+
+  .header > .headerTitle {
+    font-size: 54px;
+  }
+  .header > .headerCover {
+    height: 100%;
+    width: auto;
+    bottom: 85%;
   }
 }
