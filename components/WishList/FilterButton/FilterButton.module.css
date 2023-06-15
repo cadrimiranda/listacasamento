@@ -42,3 +42,11 @@
 .dropItem.active {
   justify-content: space-between;
 }
+
+
+@media (min-width: 768px) {
+  .filterButtonContainer {
+    width: 5%;
+    margin-left: 8px;
+  }
+}
