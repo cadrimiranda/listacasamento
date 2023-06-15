@@ -1,5 +1,5 @@
 import { MouseEventHandler } from "react";
-import styles from "./page.module.css";
+import styles from "../page.module.css";
 
 type ButtonProps = {
   isLoading: boolean;

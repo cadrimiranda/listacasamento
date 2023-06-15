@@ -1,7 +1,7 @@
 import WishList, { WishListRef } from "@/components/WishList/WishList";
 import queries from "@/src/query";
 import { Dispatch, FormEvent, SetStateAction, useRef, useState } from "react";
-import styles from "./page.module.css";
+import styles from "../page.module.css";
 import SubmitButton from "./SubmitButton";
 import InputWithLabel from "@/components/InputWithLabel/InputWithLabel";
 

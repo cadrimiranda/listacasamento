@@ -10,6 +10,7 @@ import {
 import WishListItem, { WishListItemType } from "./item/WishListItem";
 import styles from "./styles.module.css";
 import queries from "@/src/query";
+import { SearchInput } from "./SearchInput/SearchInput";
 
 export type WishListRef = {
   getData: () => void;
@@ -21,6 +22,7 @@ export type WishListType = {
 
 const WishList = forwardRef<WishListRef, WishListType>(
   ({ shouldDelete }, ref) => {
+    const [sugestion, setSuggestion] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [itens, setItens] = useState<WishListItemType[]>([]);
 
@@ -44,8 +46,24 @@ const WishList = forwardRef<WishListRef, WishListType>(
       getData();
     }, []);
 
+    let renderItens = itens;
+    if (sugestion) {
+      renderItens = itens.filter((x) => x.title === sugestion);
+    }
+
     return (
       <Suspense>
+        <SearchInput
+          label="Procure por um item"
+          suggestions={itens.map((x) => x.title)}
+          disabled={isLoading}
+          onSuggestionSelect={setSuggestion}
+          onSuggestionClear={() => {
+            if (sugestion) {
+              setSuggestion(null);
+            }
+          }}
+        />
         <div className={styles.listaPresentes}>
           {isLoading ? (
             <>
@@ -57,7 +75,7 @@ const WishList = forwardRef<WishListRef, WishListType>(
               ))}
             </>
           ) : (
-            itens.map((props) => (
+            renderItens.map((props) => (
               <WishListItem
                 refreshData={getData}
                 shouldDelete={shouldDelete}

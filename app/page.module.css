@@ -9,8 +9,8 @@
   text-align: center;
   color: #3a0000;
   font-weight: bold;
-  margin: 20px auto;
-  font-size: 18px;
+  margin: 20px auto 0px;
+  font-size: 24px;
 }
 
 @media (min-width: 769px) {

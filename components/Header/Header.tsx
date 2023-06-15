@@ -16,7 +16,7 @@ const Header = () => {
       <h2
         className={styles.headerSubTitle}
       >{`12 de novembro de 2023 - Faltam ${daysMissing} dias`}</h2>
-      <Image className={styles.headerCover} src={CoverImage} alt="header" />
+      <Image className={styles.headerCover} src={CoverImage} alt="header" priority />
     </div>
   );
 };
