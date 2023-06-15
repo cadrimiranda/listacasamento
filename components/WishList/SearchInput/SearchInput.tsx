@@ -20,7 +20,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
-  const searchRef = useClickOutside(() => setFilteredSuggestions([]));
 
   if (inputValue.length === 0) {
     onSuggestionClear();
@@ -51,6 +50,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     setFilteredSuggestions([]);
     onSuggestionClear();
   };
+  const searchRef = useClickOutside(handleClearClick);
 
   const getSuggestionsItems = (arr: string[], quantity = 10) => {
     return [...arr].sort((a, b) => a.localeCompare(b)).slice(0, quantity);
