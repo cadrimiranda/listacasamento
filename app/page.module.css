@@ -11,6 +11,7 @@
   font-weight: bold;
   margin: 20px auto 0px;
   font-size: 24px;
+  font-family: 'Playfair Display', serif;
 }
 
 @media (min-width: 769px) {
