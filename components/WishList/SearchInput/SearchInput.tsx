@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect, MouseEventHandler } from "react";
+import React, { useState } from "react";
 import styles from "./SearchInput.module.css";
+import { useClickOutside } from "@/src/useClickOutside";
 
 interface SearchInputProps {
   label: string;
@@ -18,7 +19,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
-  const searchRef = useRef<HTMLDivElement>(null);
+  const searchRef = useClickOutside(() => setFilteredSuggestions([]));
 
   if (inputValue.length === 0) {
     onSuggestionClear();
@@ -50,22 +51,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
     onSuggestionClear();
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setFilteredSuggestions([]);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <div className={styles.inputWrapper}>
       <div className={styles.dropdownContainer} ref={searchRef}>
@@ -87,7 +72,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
             {filteredSuggestions.map((suggestion, index) => (
               <div
                 key={index}
-                className={styles.autocompleteItem}
+                className="dropDownItem"
                 onClick={() => handleSuggestionClick(suggestion)}
               >
                 {suggestion}

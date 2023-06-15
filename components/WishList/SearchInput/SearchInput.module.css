@@ -2,8 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 80px;
+  width: 80%;
 }
 
 .searchInputContainer {
@@ -43,7 +42,7 @@
 
 .dropdownContainer {
   position: relative;
-  width: 85%;
+  width: 100%;
 }
 
 .autocompleteList {
@@ -54,21 +53,6 @@
   background-color: #fff;
   z-index: 1;
   top: 100%;
-}
-
-.autocompleteItem {
-  padding: 8px;
-  cursor: pointer;
-  border-bottom: 1px solid #eaeaea;
-  font-size: 12px;
-}
-
-.autocompleteItem:last-child {
-  border-bottom: none;
-}
-
-.autocompleteItem:hover {
-  background-color: rgba(248, 248, 248);
 }
 
 .searchInputContainer:focus,

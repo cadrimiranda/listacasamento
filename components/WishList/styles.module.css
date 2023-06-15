@@ -5,3 +5,10 @@
   justify-content: center;
   flex-direction: row;
 }
+
+.filterWrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 16px 0;
+}

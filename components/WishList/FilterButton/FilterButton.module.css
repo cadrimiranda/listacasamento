@@ -1,0 +1,44 @@
+.filterButtonContainer {
+  position: relative;
+  border: 1px solid #ccc;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  width: 10%;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: white;
+  color: #3a0000;
+}
+
+.filterButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdownList {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  position: absolute;
+  background-color: #fff;
+  z-index: 1;
+  top: 100%;
+  width: 160px;
+  right: 0;
+  margin-top: 4px;
+}
+
+.selected {
+  color: green;
+}
+
+.dropItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.dropItem.active {
+  justify-content: space-between;
+}

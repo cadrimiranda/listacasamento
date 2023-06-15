@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@200&family=Playfair+Display:wght@600&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css");
 
 :root {
   --max-width: 1100px;
@@ -131,6 +132,21 @@ a {
   );
   animation: shimmer 2s infinite;
   content: "";
+}
+
+.dropDownItem {
+  padding: 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #eaeaea;
+  font-size: 12px;
+}
+
+.dropDownItem:last-child {
+  border-bottom: none;
+}
+
+.dropDownItem:hover {
+  background-color: rgba(248, 248, 248);
 }
 
 @keyframes shimmer {

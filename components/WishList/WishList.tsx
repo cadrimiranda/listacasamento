@@ -11,6 +11,7 @@ import WishListItem, { WishListItemType } from "./item/WishListItem";
 import styles from "./styles.module.css";
 import queries from "@/src/query";
 import { SearchInput } from "./SearchInput/SearchInput";
+import FilterButton, { FilterOptions } from "./FilterButton/FilterButton";
 
 export type WishListRef = {
   getData: () => void;
@@ -20,8 +21,35 @@ export type WishListType = {
   shouldDelete?: boolean;
 };
 
+function sortItems(
+  items: WishListItemType[],
+  filter: FilterOptions
+): WishListItemType[] {
+  let sortedItems: WishListItemType[];
+
+  switch (filter) {
+    case FilterOptions.AscByTitle:
+      sortedItems = [...items].sort((a, b) => a.title.localeCompare(b.title));
+      break;
+    case FilterOptions.DescByTitle:
+      sortedItems = [...items].sort((a, b) => b.title.localeCompare(a.title));
+      break;
+    case FilterOptions.AscByPrice:
+      sortedItems = [...items].sort((a, b) => a.value - b.value);
+      break;
+    case FilterOptions.DescByPrice:
+      sortedItems = [...items].sort((a, b) => b.value - a.value);
+      break;
+    default:
+      sortedItems = items;
+  }
+
+  return sortedItems;
+}
+
 const WishList = forwardRef<WishListRef, WishListType>(
   ({ shouldDelete }, ref) => {
+    const [filter, setFilter] = useState<FilterOptions | null>(null);
     const [sugestion, setSuggestion] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [itens, setItens] = useState<WishListItemType[]>([]);
@@ -51,19 +79,26 @@ const WishList = forwardRef<WishListRef, WishListType>(
       renderItens = itens.filter((x) => x.title === sugestion);
     }
 
+    if (filter) {
+      renderItens = sortItems(renderItens, filter);
+    }
+
     return (
       <Suspense>
-        <SearchInput
-          label="Procure por um item"
-          suggestions={itens.map((x) => x.title)}
-          disabled={isLoading}
-          onSuggestionSelect={setSuggestion}
-          onSuggestionClear={() => {
-            if (sugestion) {
-              setSuggestion(null);
-            }
-          }}
-        />
+        <div className={styles.filterWrapper}>
+          <SearchInput
+            label="Procure por um item"
+            suggestions={itens.map((x) => x.title)}
+            disabled={isLoading}
+            onSuggestionSelect={setSuggestion}
+            onSuggestionClear={() => {
+              if (sugestion) {
+                setSuggestion(null);
+              }
+            }}
+          />
+          <FilterButton onFilterSelect={setFilter} />
+        </div>
         <div className={styles.listaPresentes}>
           {isLoading ? (
             <>
