@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 280px;
+  min-height: 300px;
   padding: 20px 12px;
   margin: 0 8px 32px;
   background-color: white;
@@ -16,10 +16,10 @@
   width: 100%;
   word-break: keep-all;
   text-align: center;
-  height: 65px;
+  height: 80px;
   display: flex;
   align-items: center;
-  text-align: justify;
+  text-align: left;
   font-weight: 600;
 }
 
