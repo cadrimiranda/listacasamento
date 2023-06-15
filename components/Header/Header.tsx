@@ -13,10 +13,17 @@ const Header = () => {
     <div className={styles.header}>
       <h1 className={styles.headerTitle}>Débora e Carlos</h1>
       <div className={styles.divider} />
-      <h2
-        className={styles.headerSubTitle}
-      >{`12 de novembro de 2023 - Faltam ${daysMissing} dias`}</h2>
-      <Image className={styles.headerCover} src={CoverImage} alt="header" priority />
+      <h2 className={styles.headerSubTitle}>
+        <span className={styles.text}>12 de novembro de 2023</span>
+        <span className={styles.dash}>-</span>
+        <span className={styles.text}>{`Faltam ${daysMissing} dias`}</span>
+      </h2>
+      <Image
+        className={styles.headerCover}
+        src={CoverImage}
+        alt="header"
+        priority
+      />
     </div>
   );
 };

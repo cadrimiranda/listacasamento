@@ -7,7 +7,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-
 }
 
 .header > .headerCover {
@@ -49,13 +48,23 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-.header > .headerSubTitle {
+.headerSubTitle {
   background-color: rgba(234, 234, 234, 0.55);
   padding: 4px 32px;
   margin: 8px auto;
   color: #3a0000;
   font-size: 16px;
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
+}
+
+.headerSubTitle .text {
+  display: block;
+}
+
+.dash {
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -69,8 +78,21 @@
     height: 300px;
   }
 
-  .header > .headerSubTitle {
+  .headerSubTitle {
     font-size: 20px;
+  }
+
+  .headerSubTitle {
+    flex-direction: row;
+  }
+
+  .headerSubTitle .text {
+    display: inline;
+  }
+
+  .dash {
+    display: inline;
+    margin: 0 10px;
   }
 
   .header > .headerTitle {
