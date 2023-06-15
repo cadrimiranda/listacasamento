@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./SearchInput.module.css";
 import { useClickOutside } from "@/src/useClickOutside";
+import { FilterOptions } from "../FilterButton/FilterButton";
 
 interface SearchInputProps {
   label: string;
@@ -51,6 +52,10 @@ const SearchInput: React.FC<SearchInputProps> = ({
     onSuggestionClear();
   };
 
+  const getSuggestionsItems = (arr: string[], quantity = 10) => {
+    return [...arr].sort((a, b) => a.localeCompare(b)).slice(0, quantity);
+  };
+
   return (
     <div className={styles.inputWrapper}>
       <div className={styles.dropdownContainer} ref={searchRef}>
@@ -69,15 +74,17 @@ const SearchInput: React.FC<SearchInputProps> = ({
         </div>
         {filteredSuggestions.length > 0 && (
           <div className={styles.autocompleteList}>
-            {filteredSuggestions.map((suggestion, index) => (
-              <div
-                key={index}
-                className="dropDownItem"
-                onClick={() => handleSuggestionClick(suggestion)}
-              >
-                {suggestion}
-              </div>
-            ))}
+            {getSuggestionsItems(filteredSuggestions).map(
+              (suggestion, index) => (
+                <div
+                  key={index}
+                  className="dropDownItem"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  {suggestion}
+                </div>
+              )
+            )}
           </div>
         )}
       </div>
