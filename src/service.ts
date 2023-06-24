@@ -1,4 +1,4 @@
-import { getModels } from "@/src/schemas";
+import { getModels, WishListDocument } from "@/src/schemas";
 import Cors from "cors";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -7,6 +7,7 @@ enum PIDS {
   getall = "getall",
   delete = "delete",
   image = "image",
+  qrCode = "qrCode",
 }
 
 export class ServiceHandler {
@@ -26,9 +27,13 @@ export class ServiceHandler {
     });
   };
 
-  private getWishItemFromBody = async (req: NextApiRequest) => {
+  private getJSONBody = (req: NextApiRequest) => {
+    return JSON.parse(req.body);
+  };
+
+  private getWishItemModel = async (req: NextApiRequest) => {
     const models = await getModels();
-    const body = JSON.parse(req.body);
+    const body = this.getJSONBody(req);
     return new models.WishListModel({
       title: body.title,
       value: body.value,
@@ -38,18 +43,18 @@ export class ServiceHandler {
   };
 
   private handleAdd = async (req: NextApiRequest, res: NextApiResponse) => {
-    const newWishItem = await this.getWishItemFromBody(req);
+    const model = await this.getWishItemModel(req);
 
     try {
-      await newWishItem.save();
-      res.status(200).json(newWishItem);
+      await model.save();
+      res.status(200).json(model);
     } catch (error) {
       console.log("add", error);
       res.status(400).json(error);
     }
   };
 
-  private getAll = async (req: any, res: any) => {
+  private getAll = async (req: NextApiRequest, res: NextApiResponse) => {
     const models = await getModels();
 
     try {
@@ -66,8 +71,24 @@ export class ServiceHandler {
     }
   };
 
-  private deleteItem = async (req: any, res: any) => {
+  private getReqId = (req: any) => {
     const { id } = req.query;
+    return id;
+  };
+
+  private getOne = async (req: any): Promise<WishListDocument | null> => {
+    const id = this.getReqId(req);
+    const models = await getModels();
+
+    try {
+      return models.WishListModel.findById(id).exec();
+    } catch (error) {
+      return null;
+    }
+  };
+
+  private deleteItem = async (req: NextApiRequest, res: NextApiResponse) => {
+    const id = this.getReqId(req);
     const models = await getModels();
 
     try {
@@ -79,12 +100,33 @@ export class ServiceHandler {
     }
   };
 
-  private getImage = async (req: any, res: any) => {
-    const { id } = req.query;
-    const models = await getModels();
-
+  private setQRCode = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-      const item = await models.WishListModel.findById(id).exec();
+      const id = this.getReqId(req);
+      const models = await getModels();
+      const body = this.getJSONBody(req);
+
+      if (body && id) {
+        const doc =
+          await models.WishListModel.findOneAndUpdate<WishListDocument>(
+            { _id: id },
+            { qrCode: body.qrCode },
+            { new: true }
+          );
+        if (doc && doc.qrCode === body.qrCode) {
+          return res.status(200).json(doc);
+        }
+      }
+      return res.status(400).json("Item not found");
+    } catch (error) {
+      console.log("setQRCode", error);
+      return res.status(400).json([]);
+    }
+  };
+
+  private getImage = async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+      const item = await this.getOne(req);
       if (item && item.imageSrc) {
         res.status(200).json(item.imageSrc);
       } else {
@@ -109,8 +151,10 @@ export class ServiceHandler {
         return this.deleteItem(req, res);
       case PIDS.image:
         return this.getImage(req, res);
+      case PIDS.qrCode:
+        return this.setQRCode(req, res);
       default:
-        res.status(200).json("Shit! SHITS MY MAN!");
+        return res.status(200).json("Shit! SHITS MY MAN!");
     }
   };
 }
