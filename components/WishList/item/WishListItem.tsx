@@ -69,7 +69,7 @@ const WishItem = ({
   return (
     <div className={styles.itemPresente}>
       <div className={styles.itemImageHolder}>
-        {imageSrc === "" ? (
+        {imageSrc === null ? (
           <div className="skeleton-placeholder skeleton-wish-image" />
         ) : (
           <Image
