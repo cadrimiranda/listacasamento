@@ -3,10 +3,10 @@ import styles from "./FilterButton.module.css";
 import { useClickOutside } from "@/src/useClickOutside";
 
 export enum FilterOptions {
-  AscByTitle = "Asc by title",
-  DescByTitle = "Desc by title",
-  AscByPrice = "Asc by price",
-  DescByPrice = "Desc by price",
+  AscByTitle = "Ascendente por título",
+  DescByTitle = "Descendente por título",
+  AscByPrice = "Ascendente por preço",
+  DescByPrice = "Descendente por preço",
 }
 
 interface FilterButtonProps {
