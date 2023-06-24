@@ -1,6 +1,8 @@
 import { getModels, WishListDocument } from "@/src/schemas";
 import Cors from "cors";
+import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
+import Database from "./db";
 
 enum PIDS {
   add = "add",
@@ -8,6 +10,7 @@ enum PIDS {
   delete = "delete",
   image = "image",
   qrCode = "qrCode",
+  refreshModels = "refreshModels",
 }
 
 export class ServiceHandler {
@@ -31,18 +34,39 @@ export class ServiceHandler {
     return JSON.parse(req.body);
   };
 
+  private getWishItemFromBody = async (req: NextApiRequest) => {
+    const models = await getModels();
+    const body = JSON.parse(req.body);
+    return new models.WishListModel({
+      title: body.title,
+      value: body.value,
+      imageSrc: body.imageSrc,
+      qrCode: body.qrCode,
+      qrCodeLink: body.qrCodeLink,
+    });
+  };
+
   private handleAddOrUpdate = async (
     req: NextApiRequest,
     res: NextApiResponse
   ) => {
     const models = await getModels();
     const body = this.getJSONBody(req);
+    const { id } = body;
 
     try {
-      const doc = await models.WishListModel.updateOne({ _id: body.id }, body, {
-        upsert: true,
-      });
-      res.status(200).json(doc);
+      if (id) {
+        delete body.id;
+        const doc = await models.WishListModel.updateOne(
+          { _id: id ?? new mongoose.Types.ObjectId() },
+          body
+        );
+        return res.status(200).json({ doc, operation: "update" });
+      }
+
+      const model = await this.getWishItemFromBody(req);
+      await model.save();
+      res.status(200).json({ doc: model, operation: "add" });
     } catch (error) {
       console.log("add", error);
       res.status(400).json(error);
@@ -101,11 +125,11 @@ export class ServiceHandler {
       if (item && item.imageSrc) {
         res.status(200).json(item.imageSrc);
       } else {
-        res.status(400).json([]);
+        res.status(400).json("");
       }
     } catch (error) {
       console.log("image", error);
-      res.status(400).json([]);
+      res.status(400).json("");
     }
   };
 
@@ -113,13 +137,13 @@ export class ServiceHandler {
     try {
       const item = await this.getOne(req);
       if (item && item.qrCode) {
-        res.status(200).json(item.qrCode);
+        res.status(200).json({ image: item.qrCode, link: item.qrCodeLink });
       } else {
-        res.status(400).json([]);
+        res.status(400).json({});
       }
     } catch (error) {
       console.log("image", error);
-      res.status(400).json([]);
+      res.status(400).json({});
     }
   };
 
@@ -138,6 +162,8 @@ export class ServiceHandler {
         return this.getImage(req, res);
       case PIDS.qrCode:
         return this.getQrCode(req, res);
+      case PIDS.refreshModels:
+        Database.getInstance().refreshModels();
       default:
         return res.status(200).json("Shit! SHITS MY MAN!");
     }

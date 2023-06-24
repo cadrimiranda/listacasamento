@@ -7,6 +7,7 @@ export type WishListDocument = {
   value: Number;
   imageSrc: String;
   qrCode: String;
+  qrCodeLink: String;
 };
 
 export const WishListSchema = new Schema<WishListDocument>({
@@ -14,6 +15,7 @@ export const WishListSchema = new Schema<WishListDocument>({
   value: Number,
   imageSrc: String,
   qrCode: String,
+  qrCodeLink: String,
 });
 
 export interface Models {

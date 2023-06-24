@@ -22,32 +22,6 @@ export type WishListType = {
   onAddQrCode?: (item: WishListItemType) => void;
 };
 
-function sortItems(
-  items: WishListItemType[],
-  filter: FilterOptions
-): WishListItemType[] {
-  let sortedItems: WishListItemType[];
-
-  switch (filter) {
-    case FilterOptions.AscByTitle:
-      sortedItems = [...items].sort((a, b) => a.title.localeCompare(b.title));
-      break;
-    case FilterOptions.DescByTitle:
-      sortedItems = [...items].sort((a, b) => b.title.localeCompare(a.title));
-      break;
-    case FilterOptions.AscByPrice:
-      sortedItems = [...items].sort((a, b) => a.value - b.value);
-      break;
-    case FilterOptions.DescByPrice:
-      sortedItems = [...items].sort((a, b) => b.value - a.value);
-      break;
-    default:
-      sortedItems = items;
-  }
-
-  return sortedItems;
-}
-
 const WishList = forwardRef<WishListRef, WishListType>(
   ({ shouldDelete, onAddQrCode }, ref) => {
     const [filter, setFilter] = useState<FilterOptions | null>(null);
@@ -76,12 +50,47 @@ const WishList = forwardRef<WishListRef, WishListType>(
     }, []);
 
     let renderItens = itens;
+
+    const filterItens = useCallback(() => {
+      return itens.filter((x) => x.title === sugestion);
+    }, [itens, sugestion]);
+
+    const sortItems = useCallback(
+      (items: WishListItemType[]) => {
+        let sortedItems: WishListItemType[];
+
+        switch (filter) {
+          case FilterOptions.AscByTitle:
+            sortedItems = [...items].sort((a, b) =>
+              a.title.localeCompare(b.title)
+            );
+            break;
+          case FilterOptions.DescByTitle:
+            sortedItems = [...items].sort((a, b) =>
+              b.title.localeCompare(a.title)
+            );
+            break;
+          case FilterOptions.AscByPrice:
+            sortedItems = [...items].sort((a, b) => a.value - b.value);
+            break;
+          case FilterOptions.DescByPrice:
+            sortedItems = [...items].sort((a, b) => b.value - a.value);
+            break;
+          default:
+            sortedItems = items;
+        }
+
+        return sortedItems;
+      },
+      [filter]
+    );
+
     if (sugestion) {
-      renderItens = itens.filter((x) => x.title === sugestion);
+      renderItens = filterItens();
     }
 
     if (filter) {
-      renderItens = sortItems(renderItens, filter);
+      renderItens = sortItems(renderItens);
     }
 
     return (
@@ -117,6 +126,7 @@ const WishList = forwardRef<WishListRef, WishListType>(
                 shouldDelete={shouldDelete}
                 key={props.title}
                 onAddQrCode={onAddQrCode}
+                removeItem={(id) => setItens(itens.filter((x) => x.id !== id))}
                 {...props}
               />
             ))

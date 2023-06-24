@@ -11,6 +11,7 @@ export type WishListItemType = {
   value: number;
   imageSrc: string;
   qrCode: string;
+  qrCodeLink: string;
   id: string;
 };
 
@@ -21,39 +22,48 @@ const WishItem = ({
   shouldDelete,
   refreshData,
   onAddQrCode,
+  removeItem,
 }: WishListItemType &
   Pick<WishListType, "shouldDelete" | "onAddQrCode"> & {
     refreshData?: () => void;
+    removeItem: (id: string) => void;
   }) => {
-  const [imageSrc, setImageSrc] = useState("");
-  const [qrCode, setQrCode] = useState("");
+  const [imageSrc, setImageSrc] = useState(null);
+  const [qrCode, setQrCode] = useState<{ image: ""; link: "" } | null>(null);
   const modal = useModal();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
     await queries.deleteWishItem(id);
-    refreshData?.();
+    removeItem(id);
   };
 
   const handleAddQrCode = async () => {
-    onAddQrCode?.({ id, imageSrc, qrCode, title, value });
+    onAddQrCode?.({
+      id,
+      imageSrc: imageSrc || "",
+      qrCode: qrCode?.image || "",
+      qrCodeLink: qrCode?.link || "",
+      title,
+      value,
+    });
     const topElement = document.getElementById("add_form");
     topElement?.scrollIntoView({ behavior: "smooth" });
   };
 
-  if (qrCode === "") {
+  if (qrCode === null) {
     queries
       .getQRCode(id)
       .then((res) => res.json())
-      .then(setQrCode);
+      .then((code) => code && setQrCode(code));
   }
 
-  if (imageSrc === "") {
+  if (imageSrc === null) {
     queries
       .getImageSrc(id)
       .then((res) => res.json())
-      .then(setImageSrc);
+      .then((img) =>  img && setImageSrc(img));
   }
 
   return (
@@ -64,7 +74,7 @@ const WishItem = ({
         ) : (
           <Image
             className={styles.giftImage}
-            src={imageSrc}
+            src={imageSrc || ""}
             alt={`presente-${title}`}
             width={100}
             height={100}
@@ -94,7 +104,7 @@ const WishItem = ({
             onClick={handleAddQrCode}
             className={styles.buyButton}
           >
-            QR Code
+            Editar
           </button>
         </>
       ) : (

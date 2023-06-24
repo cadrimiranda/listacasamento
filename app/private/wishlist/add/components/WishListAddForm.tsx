@@ -1,6 +1,13 @@
 import WishList, { WishListRef } from "@/components/WishList/WishList";
 import queries from "@/src/query";
-import { Dispatch, FormEvent, SetStateAction, useRef, useState } from "react";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styles from "../page.module.css";
 import SubmitButton from "./SubmitButton";
 import InputWithLabel from "@/components/InputWithLabel/InputWithLabel";
@@ -9,13 +16,13 @@ import Image from "next/image";
 
 export const WishListAddForm = () => {
   const [itemToUpdate, setItem] = useState<WishListItemType | null>(null);
-  const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const refWishList = useRef<WishListRef>(null);
   const refImage = useRef<HTMLInputElement>(null);
   const refQRCode = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
+  const [qrCodeLink, setQrCodeLink] = useState("");
   const [imageSrc, setImageSrc] = useState("");
   const [qrCode, setQrCode] = useState("");
 
@@ -46,6 +53,7 @@ export const WishListAddForm = () => {
     setValue(item.value.toString());
     setImageSrc(item.imageSrc);
     setQrCode(item.qrCode);
+    setQrCodeLink(item.qrCodeLink);
   };
 
   const clearInputs =
@@ -55,6 +63,7 @@ export const WishListAddForm = () => {
       setValue("");
       setImageSrc("");
       setQrCode("");
+      setQrCodeLink("");
 
       if (refImage.current) {
         refImage.current.value = "";
@@ -87,6 +96,7 @@ export const WishListAddForm = () => {
       value,
       imageSrc,
       qrCode,
+      qrCodeLink,
     };
 
     if (itemToUpdate) {
@@ -95,14 +105,21 @@ export const WishListAddForm = () => {
     queries.addWishItem(item).then(clearInputs());
   };
 
-  const handleEdit = (item: WishListItemType) => {
-    setItem(item);
-    fillInputs(item);
-  };
+  const itens = useMemo(() => {
+    const handleEdit = (item: WishListItemType) => {
+      setItem(item);
+      fillInputs(item);
+    };
+    return <WishList ref={refWishList} shouldDelete onAddQrCode={handleEdit} />;
+  }, []);
 
   return (
     <div>
-      <form className={styles.formContainer} onSubmit={handleSubmit} id="add_form">
+      <form
+        className={styles.formContainer}
+        onSubmit={handleSubmit}
+        id="add_form"
+      >
         <InputWithLabel
           disabled={isLoading}
           id="title"
@@ -117,6 +134,14 @@ export const WishListAddForm = () => {
           type="number"
           id="value"
           value={value}
+        />
+        <InputWithLabel
+          disabled={isLoading}
+          onChange={handleInput(setQrCodeLink)}
+          label="QR code link"
+          type="text"
+          id="qrCodeLink"
+          value={qrCodeLink}
         />
         <div
           style={{
@@ -164,7 +189,7 @@ export const WishListAddForm = () => {
           onClick={clearInputs(false)}
         />
       </form>
-      <WishList ref={refWishList} shouldDelete onAddQrCode={handleEdit} />
+      {itens}
     </div>
   );
 };

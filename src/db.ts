@@ -1,5 +1,5 @@
 "use client";
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 class Database {
   private mongoUrl: string = process.env.NEXT_PUBLIC_MONGO_URL as string;
@@ -34,6 +34,16 @@ class Database {
     }
 
     mongoose.disconnect();
+    this.connection.close(true);
+    console.log("Conexão com o MongoDB encerrada");
+  }
+
+  public refreshModels(): void {
+    if (!this.connection) {
+      throw new Error("A conexão com o banco de dados não foi estabelecida.");
+    }
+
+    this.connection.deleteModel("WishList");
     console.log("Conexão com o MongoDB encerrada");
   }
 
