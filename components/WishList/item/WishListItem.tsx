@@ -18,14 +18,15 @@ const WishItem = ({
   id,
   title,
   value,
-  qrCode,
   shouldDelete,
   refreshData,
+  onAddQrCode,
 }: WishListItemType &
-  Pick<WishListType, "shouldDelete"> & {
+  Pick<WishListType, "shouldDelete" | "onAddQrCode"> & {
     refreshData?: () => void;
   }) => {
   const [imageSrc, setImageSrc] = useState("");
+  const [qrCode, setQrCode] = useState("");
   const modal = useModal();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -34,6 +35,19 @@ const WishItem = ({
     await queries.deleteWishItem(id);
     refreshData?.();
   };
+
+  const handleAddQrCode = async () => {
+    onAddQrCode?.({ id, imageSrc, qrCode, title, value });
+    const topElement = document.getElementById("add_form");
+    topElement?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  if (qrCode === "") {
+    queries
+      .getQRCode(id)
+      .then((res) => res.json())
+      .then(setQrCode);
+  }
 
   if (imageSrc === "") {
     queries
@@ -67,19 +81,28 @@ const WishItem = ({
       </p>
 
       {shouldDelete ? (
-        <button
-          disabled={isDeleting}
-          onClick={handleDelete}
-          className={styles.buyButton}
-        >
-          Delete
-        </button>
+        <>
+          <button
+            disabled={isDeleting}
+            onClick={handleDelete}
+            className={styles.buyButton}
+          >
+            Delete
+          </button>
+          <button
+            disabled={isDeleting}
+            onClick={handleAddQrCode}
+            className={styles.buyButton}
+          >
+            QR Code
+          </button>
+        </>
       ) : (
         <button onClick={modal.openModal} className={styles.buyButton}>
           Presentear
         </button>
       )}
-      <Modal qrCode={qrCode} onClose={modal.closeModal} isOpen={modal.isOpen} />
+      <Modal onClose={modal.closeModal} isOpen={modal.isOpen} />
     </div>
   );
 };

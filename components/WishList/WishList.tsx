@@ -19,6 +19,7 @@ export type WishListRef = {
 
 export type WishListType = {
   shouldDelete?: boolean;
+  onAddQrCode?: (item: WishListItemType) => void;
 };
 
 function sortItems(
@@ -48,7 +49,7 @@ function sortItems(
 }
 
 const WishList = forwardRef<WishListRef, WishListType>(
-  ({ shouldDelete }, ref) => {
+  ({ shouldDelete, onAddQrCode }, ref) => {
     const [filter, setFilter] = useState<FilterOptions | null>(null);
     const [sugestion, setSuggestion] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -115,6 +116,7 @@ const WishList = forwardRef<WishListRef, WishListType>(
                 refreshData={getData}
                 shouldDelete={shouldDelete}
                 key={props.title}
+                onAddQrCode={onAddQrCode}
                 {...props}
               />
             ))

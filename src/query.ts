@@ -31,6 +31,11 @@ const queries = {
       method: "POST",
     });
   },
+  getQRCode: (id: string) => {
+    return fetch(`/api/wishlist/qrCode?id=${id}`, {
+      method: "POST",
+    });
+  },
 };
 
 export default queries;

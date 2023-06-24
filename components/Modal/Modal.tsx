@@ -1,35 +1,33 @@
 import React from "react";
 import styles from "./styles.module.css";
-import wishListStyles from "../WishList/item/styles.module.css";
-import { WishListItemType } from "../WishList/item/WishListItem";
-import Image from "next/image";
 
 interface ModalState {
   isOpen: boolean;
   onClose: () => void;
-  qrCode: WishListItemType["qrCode"];
+  onLoading?: boolean;
+  children?: any;
 }
 
-const Modal = ({ isOpen, onClose, qrCode }: ModalState) => {
+const Modal = ({ isOpen, onClose, children, onLoading }: ModalState) => {
+  const handleOnClose = () => {
+    if (!onLoading) {
+      onClose();
+    }
+  };
+
   return (
     isOpen && (
       <div
-        onClick={onClose}
+        onClick={handleOnClose}
         className={`${styles.modal} ${isOpen ? styles.open : ""}`}
       >
         <div className={styles.modalContent}>
-          <span className={styles.close} onClick={onClose}>
+          <span className={styles.close} onClick={handleOnClose}>
             &times;
           </span>
-          <Image
-            className={wishListStyles.giftImage}
-            src={qrCode}
-            alt={`qrCode`}
-            width={100}
-            height={100}
-          />
+          {children}
         </div>
-        <div className={styles.overlay} onClick={onClose} />
+        <div className={styles.overlay} onClick={handleOnClose} />
       </div>
     )
   );

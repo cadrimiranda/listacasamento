@@ -4,17 +4,22 @@ import styles from "../page.module.css";
 type ButtonProps = {
   isLoading: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  title?: string;
 };
 
-const SubmitButton = ({ isLoading, onClick }: ButtonProps) => {
+const SubmitButton = ({
+  isLoading,
+  onClick,
+  title = "Salvar",
+}: ButtonProps) => {
   return (
     <button
       className={`${styles.submitButton} ${isLoading ? styles.loading : ""}`}
       onClick={onClick}
       disabled={isLoading}
-      type="submit"
+      type={onClick ? 'button' : "submit"}
     >
-      {isLoading ? "" : "Submit"}
+      {isLoading ? "" : title}
     </button>
   );
 };
