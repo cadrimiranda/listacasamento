@@ -2,8 +2,6 @@ import Image from "next/image";
 import styles from "./styles.module.css";
 import queries from "@/src/query";
 import { useState } from "react";
-import useModal from "@/src/useModal";
-import Modal from "../../Modal/Modal";
 import { WishListType } from "../WishList";
 
 export type WishListItemType = {
@@ -15,22 +13,30 @@ export type WishListItemType = {
   id: string;
 };
 
+export type QrCodeData = { image: ""; link: "" };
+
+export const toBRLValue = (value: number) =>
+  value.toLocaleString("pt-BR", {
+    currency: "BRL",
+    style: "currency",
+    minimumFractionDigits: 2,
+  });
+
 const WishItem = ({
   id,
   title,
   value,
   shouldDelete,
-  refreshData,
   onAddQrCode,
   removeItem,
+  onGift,
 }: WishListItemType &
   Pick<WishListType, "shouldDelete" | "onAddQrCode"> & {
-    refreshData?: () => void;
+    onGift?: (id: string, image: string, qrCode: QrCodeData) => void;
     removeItem: (id: string) => void;
   }) => {
   const [imageSrc, setImageSrc] = useState(null);
-  const [qrCode, setQrCode] = useState<{ image: ""; link: "" } | null>(null);
-  const modal = useModal();
+  const [qrCode, setQrCode] = useState<QrCodeData | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -63,7 +69,7 @@ const WishItem = ({
     queries
       .getImageSrc(id)
       .then((res) => res.json())
-      .then((img) =>  img && setImageSrc(img));
+      .then((img) => img && setImageSrc(img));
   }
 
   return (
@@ -82,13 +88,7 @@ const WishItem = ({
         )}
       </div>
       <p className={styles.itemTitulo}>{title}</p>
-      <p className={styles.amount}>
-        {value.toLocaleString("pt-BR", {
-          currency: "BRL",
-          style: "currency",
-          minimumFractionDigits: 2,
-        })}
-      </p>
+      <p className={styles.amount}>{toBRLValue(value)}</p>
 
       {shouldDelete ? (
         <>
@@ -108,11 +108,13 @@ const WishItem = ({
           </button>
         </>
       ) : (
-        <button onClick={modal.openModal} className={styles.buyButton}>
+        <button
+          onClick={() => onGift?.(id, imageSrc || "", qrCode as QrCodeData)}
+          className={styles.buyButton}
+        >
           Presentear
         </button>
       )}
-      <Modal onClose={modal.closeModal} isOpen={modal.isOpen} />
     </div>
   );
 };

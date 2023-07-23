@@ -5,13 +5,21 @@ import {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from "react";
-import WishListItem, { WishListItemType } from "./item/WishListItem";
+import WishListItem, {
+  QrCodeData,
+  WishListItemType,
+} from "./item/WishListItem";
 import styles from "./styles.module.css";
 import queries from "@/src/query";
 import { SearchInput } from "./SearchInput/SearchInput";
-import FilterButton, { FilterOptions } from "./FilterButton/FilterButton";
+import FilterButton from "./FilterButton/FilterButton";
+import Modal from "../Modal/Modal";
+import { useDataHandler } from "@/src/usaDataHandler";
+import useModalHandler from "@/src/useModalHandler";
+import { GiftItem } from "./giftItem/giftItem";
 
 export type WishListRef = {
   getData: () => void;
@@ -24,10 +32,19 @@ export type WishListType = {
 
 const WishList = forwardRef<WishListRef, WishListType>(
   ({ shouldDelete, onAddQrCode }, ref) => {
-    const [filter, setFilter] = useState<FilterOptions | null>(null);
-    const [sugestion, setSuggestion] = useState<string | null>(null);
+    const {
+      data,
+      setItens,
+      setFilter,
+      selectedItem,
+      setSuggestion,
+      handleRemoveItem,
+      handleSelectItem,
+      autocompleteSuggestions,
+      handleClearSuggestions,
+    } = useDataHandler();
     const [isLoading, setIsLoading] = useState(false);
-    const [itens, setItens] = useState<WishListItemType[]>([]);
+    const refModal = useModalHandler();
 
     const getData = useCallback(() => {
       setIsLoading(true);
@@ -47,65 +64,22 @@ const WishList = forwardRef<WishListRef, WishListType>(
 
     useEffect(() => {
       getData();
-    }, []);
+    }, [getData]);
 
-    let renderItens = itens;
-
-    const filterItens = useCallback(() => {
-      return itens.filter((x) => x.title === sugestion);
-    }, [itens, sugestion]);
-
-    const sortItems = useCallback(
-      (items: WishListItemType[]) => {
-        let sortedItems: WishListItemType[];
-
-        switch (filter) {
-          case FilterOptions.AscByTitle:
-            sortedItems = [...items].sort((a, b) =>
-              a.title.localeCompare(b.title)
-            );
-            break;
-          case FilterOptions.DescByTitle:
-            sortedItems = [...items].sort((a, b) =>
-              b.title.localeCompare(a.title)
-            );
-            break;
-          case FilterOptions.AscByPrice:
-            sortedItems = [...items].sort((a, b) => a.value - b.value);
-            break;
-          case FilterOptions.DescByPrice:
-            sortedItems = [...items].sort((a, b) => b.value - a.value);
-            break;
-          default:
-            sortedItems = items;
-        }
-
-        return sortedItems;
-      },
-      [filter]
-    );
-
-    if (sugestion) {
-      renderItens = filterItens();
-    }
-
-    if (filter) {
-      renderItens = sortItems(renderItens);
-    }
+    const onGift = (id: string, image: string, qrCode: QrCodeData) => {
+      handleSelectItem(id, image, qrCode);
+      refModal.openModal();
+    };
 
     return (
       <Suspense>
         <div className={styles.filterWrapper}>
           <SearchInput
             label="Procure por um item"
-            suggestions={itens.map((x) => x.title)}
+            suggestions={autocompleteSuggestions}
             disabled={isLoading}
             onSuggestionSelect={setSuggestion}
-            onSuggestionClear={() => {
-              if (sugestion) {
-                setSuggestion(null);
-              }
-            }}
+            onSuggestionClear={handleClearSuggestions}
           />
           <FilterButton onFilterSelect={setFilter} />
         </div>
@@ -120,18 +94,21 @@ const WishList = forwardRef<WishListRef, WishListType>(
               ))}
             </>
           ) : (
-            renderItens.map((props) => (
+            data.map((props) => (
               <WishListItem
-                refreshData={getData}
                 shouldDelete={shouldDelete}
                 key={props.title}
                 onAddQrCode={onAddQrCode}
-                removeItem={(id) => setItens(itens.filter((x) => x.id !== id))}
+                removeItem={handleRemoveItem}
+                onGift={onGift}
                 {...props}
               />
             ))
           )}
         </div>
+        <Modal ref={refModal.ref}>
+          {selectedItem && <GiftItem item={selectedItem} />}
+        </Modal>
       </Suspense>
     );
   }

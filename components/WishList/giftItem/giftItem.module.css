@@ -1,0 +1,28 @@
+.title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #3a0000;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #3a0000;
+  margin-bottom: 20px;
+}
+
+.title,
+.subtitle {
+  text-align: justify;
+}
+
+.subtitle span {
+  text-decoration: underline;
+  font-weight: bolder;
+}
+
+.qrCodeImage {
+  width: auto;
+  height: 200px;
+  margin-bottom: 16px;
+}
