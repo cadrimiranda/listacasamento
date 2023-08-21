@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./SearchInput.module.css";
 import { useClickOutside } from "@/src/useClickOutside";
 import { FilterOptions } from "../FilterButton/FilterButton";
+import queries from "@/src/query";
+import { LogType } from "@/src/schemas";
 
 interface SearchInputProps {
   label: string;
@@ -18,6 +20,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onSuggestionSelect,
   onSuggestionClear,
 }) => {
+  const refSearch = useRef<number>(null);
   const [inputValue, setInputValue] = useState<string>("");
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
 
@@ -29,14 +32,24 @@ const SearchInput: React.FC<SearchInputProps> = ({
     const value = event.target.value;
     setInputValue(value);
 
-    if (value.length > 0) {
-      const filtered = suggestions.filter((suggestion) =>
-        suggestion.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredSuggestions(filtered);
-    } else {
-      setFilteredSuggestions([]);
+    if (refSearch.current) {
+      clearTimeout(refSearch.current);
+      // @ts-ignore
+      refSearch.current = null;
     }
+
+    // @ts-ignore
+    refSearch.current = setTimeout(() => {
+      if (value.length > 0) {
+        queries.log({ logType: LogType.filter, filter: value });
+        const filtered = suggestions.filter((suggestion) =>
+          suggestion.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredSuggestions(filtered);
+      } else {
+        setFilteredSuggestions([]);
+      }
+    }, 5000);
   };
 
   const handleSuggestionClick = (suggestion: string) => {

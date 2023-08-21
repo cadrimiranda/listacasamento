@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from "react";
 import styles from "./FilterButton.module.css";
 import { useClickOutside } from "@/src/useClickOutside";
+import { logger } from "@/src/logger";
+import queries from "@/src/query";
+import { LogType } from "@/src/schemas";
 
 export enum FilterOptions {
   AscByTitle = "Ascendente por título",
@@ -24,6 +27,10 @@ const FilterButton: React.FC<FilterButtonProps> = ({ onFilterSelect }) => {
     setSelectedFilter(filter);
     onFilterSelect(filter);
     setIsOpen(false);
+    queries.log({
+      logType: LogType.ordered,
+      filter,
+    });
   };
 
   const isSelected = useCallback(

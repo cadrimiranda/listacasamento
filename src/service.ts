@@ -3,6 +3,7 @@ import Cors from "cors";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import Database from "./db";
+import { logger } from "./logger";
 
 enum PIDS {
   add = "add",
@@ -11,6 +12,7 @@ enum PIDS {
   image = "image",
   qrCode = "qrCode",
   refreshModels = "refreshModels",
+  log = "log",
 }
 
 export class ServiceHandler {
@@ -152,6 +154,8 @@ export class ServiceHandler {
     await this.runMiddleware(req, res);
 
     switch (pid) {
+      case PIDS.log:
+        return logger.log(req, res);
       case PIDS.add:
         return this.handleAddOrUpdate(req, res);
       case PIDS.getall:
