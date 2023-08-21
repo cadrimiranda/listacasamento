@@ -10,6 +10,24 @@ export type WishListDocument = {
   qrCodeLink: String;
 };
 
+export enum LogType {
+  seen = "seen",
+  clicked = "clicked",
+  filter = "filter",
+  ordered = "ordered",
+}
+
+export type WishListLog = {
+  document?: String;
+  filter?: String;
+  logType: String;
+};
+
+export const LogSchema = new Schema<WishListLog>({
+  document: String,
+  logType: String,
+});
+
 export const WishListSchema = new Schema<WishListDocument>({
   title: String,
   value: Number,
@@ -20,6 +38,7 @@ export const WishListSchema = new Schema<WishListDocument>({
 
 export interface Models {
   WishListModel: Model<WishListDocument>;
+  Log: Model<WishListLog>;
 }
 
 export async function getModels(): Promise<Models> {
@@ -31,5 +50,6 @@ export async function getModels(): Promise<Models> {
     WishListModel:
       connection.models.WishList ||
       connection.model("WishList", WishListSchema),
+    Log: connection.models.Log || connection.model("Log", LogSchema),
   };
 }

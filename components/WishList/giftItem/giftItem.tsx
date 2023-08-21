@@ -3,12 +3,21 @@ import { toast, ToastContainer } from "react-toastify";
 import { WishListItemType, toBRLValue } from "../item/WishListItem";
 import gifItemStyles from "./giftItem.module.css";
 import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
+import { LogType } from "@/src/schemas";
+import queries from "@/src/query";
 
 interface IGiftItem {
   item: WishListItemType;
 }
 
 const GiftItem = ({ item }: IGiftItem) => {
+  const [alreadyLogged, setLogged] = useState(false);
+  if (!alreadyLogged) {
+    queries.log({ logType: LogType.clicked, document: item.title });
+    setLogged(true);
+  }
+
   const copyToClipboard = () => {
     if (!navigator.clipboard) {
       console.error("Clipboard API não suportada neste navegador");

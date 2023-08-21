@@ -1,8 +1,10 @@
 import Image from "next/image";
 import styles from "./styles.module.css";
 import queries from "@/src/query";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { WishListType } from "../WishList";
+import { useIsInViewport } from "./useIsInViewport";
+import { LogType } from "@/src/schemas";
 
 export type WishListItemType = {
   title: string;
@@ -35,9 +37,16 @@ const WishItem = ({
     onGift?: (id: string, image: string, qrCode: QrCodeData) => void;
     removeItem: (id: string) => void;
   }) => {
+  const ref = useRef<HTMLDivElement>(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [qrCode, setQrCode] = useState<QrCodeData | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const isInViewPort = useIsInViewport(ref);
+  const [alreadyLogged, setLogged] = useState(false);
+  if (isInViewPort && !alreadyLogged) {
+    queries.log({ logType: LogType.seen, document: title });
+    setLogged(true);
+  }
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -73,7 +82,7 @@ const WishItem = ({
   }
 
   return (
-    <div className={styles.itemPresente}>
+    <div ref={ref} className={styles.itemPresente}>
       <div className={styles.itemImageHolder}>
         {imageSrc === null ? (
           <div className="skeleton-placeholder skeleton-wish-image" />

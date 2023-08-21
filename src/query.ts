@@ -1,4 +1,5 @@
 import { WishListItemType } from "@/components/WishList/item/WishListItem";
+import { WishListLog } from "./schemas";
 
 const queries = {
   queryAllWishItems: (): Promise<WishListItemType[]> => {
@@ -35,6 +36,14 @@ const queries = {
     return fetch(`/api/wishlist/qrCode?id=${id}`, {
       method: "POST",
     });
+  },
+  log: (log: WishListLog) => {
+    if (process.env.NODE_ENV === "production") {
+      return fetch(`/api/wishlist/log`, {
+        method: "POST",
+        body: JSON.stringify(log),
+      });
+    }
   },
 };
 
