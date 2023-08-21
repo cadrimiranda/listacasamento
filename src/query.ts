@@ -38,6 +38,7 @@ const queries = {
     });
   },
   log: (log: WishListLog) => {
+    console.log("test signed commit");
     if (process.env.NODE_ENV === "production") {
       return fetch(`/api/wishlist/log`, {
         method: "POST",
