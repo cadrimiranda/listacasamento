@@ -26,6 +26,7 @@ export type WishListLog = {
 export const LogSchema = new Schema<WishListLog>({
   document: String,
   logType: String,
+  filter: String,
 });
 
 export const WishListSchema = new Schema<WishListDocument>({
