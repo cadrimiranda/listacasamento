@@ -26,6 +26,7 @@ const GiftItem = ({ item }: IGiftItem) => {
     navigator.clipboard
       .writeText(item.qrCodeLink)
       .then(() => {
+        queries.log({ logType: LogType.copyPIX, document: item.title });
         toast("Copiado", {
           position: "bottom-center",
           autoClose: 3000,

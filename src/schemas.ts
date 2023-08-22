@@ -15,6 +15,7 @@ export enum LogType {
   clicked = "clicked",
   filter = "filter",
   ordered = "ordered",
+  copyPIX = "copyPIX",
 }
 
 export type WishListLog = {
