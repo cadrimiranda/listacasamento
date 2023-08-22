@@ -45,6 +45,9 @@ const queries = {
       });
     }
   },
+  getDashboard: () => {
+    return fetch(`/api/wishlist/dashboard`);
+  },
 };
 
 export default queries;

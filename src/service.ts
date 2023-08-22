@@ -13,6 +13,7 @@ enum PIDS {
   qrCode = "qrCode",
   refreshModels = "refreshModels",
   log = "log",
+  dashboard = "dashboard",
 }
 
 export class ServiceHandler {
@@ -156,6 +157,8 @@ export class ServiceHandler {
     switch (pid) {
       case PIDS.log:
         return logger.log(req, res);
+      case PIDS.dashboard:
+        return logger.getDashboard(req, res);
       case PIDS.add:
         return this.handleAddOrUpdate(req, res);
       case PIDS.getall:
