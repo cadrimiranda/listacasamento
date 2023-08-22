@@ -28,7 +28,7 @@ const Dashboard = () => {
           <th>Count</th>
         </tr>
         {data.map((x) => (
-          <tr>
+          <tr key={x.id}>
             <td>{x.document}</td>
             <td>{x.logType}</td>
             <td>{x.count}</td>
