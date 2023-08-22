@@ -30,6 +30,15 @@ export type WishListType = {
   onAddQrCode?: (item: WishListItemType) => void;
 };
 
+export function shuffleArray<T>(array: T[]): T[] {
+  const arrayCopy = [...array];
+  for (let i = arrayCopy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arrayCopy[i], arrayCopy[j]] = [arrayCopy[j], arrayCopy[i]];
+  }
+  return arrayCopy;
+}
+
 const WishList = forwardRef<WishListRef, WishListType>(
   ({ shouldDelete, onAddQrCode }, ref) => {
     const {
@@ -49,7 +58,7 @@ const WishList = forwardRef<WishListRef, WishListType>(
     const getData = useCallback(() => {
       setIsLoading(true);
       queries.queryAllWishItems().then((res) => {
-        setItens(res);
+        setItens(shuffleArray(res));
         setIsLoading(false);
       });
     }, [setItens]);
